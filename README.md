@@ -73,7 +73,7 @@ The data is synthetic. `manifestfix seed` writes 300 documents with 1,041 contai
 ```
 
 - `schema-only` accepts all 300 documents and 70 of them are wrong: 20 with weights left in pounds, 20 with a transposed container number, 15 with a dropped line and 15 with net and gross swapped. All 70 are schema-valid.
-- `rules+blind` has no silent errors, but a generic retry fixes nothing the rules found. All 90 documents with a schema or rule fault run both repair rounds and end in review, which costs 2.286 calls per accepted document.
+- `rules+blind` has no silent errors, but a generic retry fixes nothing the rules found. That outcome is true by construction of the offline model, which repairs a fault only when the prompt names its code and path and never when the prompt is the blind "try again"; it does not measure how a real model responds to a blind retry. All 90 documents with a schema or rule fault run both repair rounds and end in review, which costs 2.286 calls per accepted document.
 - `rules+targeted` fixes 85 of those 90 in one round each. The 5 left are the stubborn transpositions, which the offline model never gets right. They end in review with `ISO6346_CHECK_DIGIT`, and the pipeline does not compute a digit to fix them.
 
 Those counts are derived from the fault plan before the pipeline runs, and `eval` prints them next to the measured ones:
@@ -85,7 +85,7 @@ Expected from the fault plan alone:
   rules+targeted: 295 correct, 0 silent, 5 review, 395 calls
 ```
 
-Per-field exact accuracy over the accepted documents (header and totals fields are 100.0% in all three configurations and are omitted here):
+Per-field exact accuracy over the accepted documents (header and totals fields are 100.0% in all three configurations and are omitted here). The denominators differ by configuration: header and totals fields are scored over 300, 210 and 295 accepted documents, and container-line fields over the 1,041, 709 and 1,022 truth container lines of those documents, for `schema-only`, `rules+blind` and `rules+targeted`. The percentages are therefore not comparable across columns as rates over the same documents:
 
 ```text
 ┃ Field                   ┃ schema-only ┃ rules+blind ┃ rules+targeted ┃

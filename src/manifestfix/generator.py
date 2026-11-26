@@ -2,7 +2,7 @@
 
 Properties of the default dataset (300 documents):
 
-* 1 to 6 containers per document, about 1,050 container lines in total.
+* 1 to 6 containers per document, 1,041 container lines in total for the default seed (7).
 * Every container number carries a valid ISO 6346 check digit.
 * 30% of documents state weights in pounds, with a totals line giving both units.
 * 15% use a decimal-comma locale (`1.234,5`).
