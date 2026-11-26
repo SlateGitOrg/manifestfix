@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "manifestfix"
+version = "0.1.0"
+description = "Validation and targeted repair for LLM extraction of freight manifests."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "manifestfix contributors" }]
+keywords = ["structured-output", "information-extraction", "pydantic", "logistics"]
+dependencies = [
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "typer>=0.12",
+    "rich>=13.7",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[project.scripts]
+manifestfix = "manifestfix.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/manifestfix"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = ["error"]
+markers = ["live: calls a real OpenAI-compatible endpoint; needs MANIFESTFIX_LIVE=1"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
